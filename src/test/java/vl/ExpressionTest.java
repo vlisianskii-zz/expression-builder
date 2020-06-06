@@ -4,6 +4,7 @@ import org.junit.Test;
 import vl.algorithms.*;
 import vl.function.Function;
 import vl.function.NextFunction;
+import vl.function.PriorFunction;
 import vl.table.Result;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;
@@ -15,7 +16,7 @@ import static com.google.common.collect.Maps.newHashMap;
 public class ExpressionTest {
     @Test
     public void test() {
-        Function<Integer, String>[] functions = new Function[]{new NextFunction()};
+        Function<Integer, String>[] functions = new Function[]{new NextFunction(), new PriorFunction()};
         TokenAlgorithm<Integer, String> algorithm = new ShuntingYard<>();
 
         ValueTable<Integer, String> table = new SimpleTable();
