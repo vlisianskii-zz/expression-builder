@@ -40,6 +40,7 @@ public class TrickyExpressionTest {
         // action
         table.traverseEach((x, y) -> {
             Result<Integer, String> result = expression.calculate(table, x, y);
+            System.out.println(result);
             results.add(result);
         });
         // verify

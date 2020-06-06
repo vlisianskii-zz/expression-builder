@@ -37,6 +37,10 @@ public class AbstractExpression<X, Y> {
                 .collect(Collectors.toMap(Constants::name, Constants::getValue));
     }
 
+    public Result<X, Y> calculate() {
+        return compute(null, null, null, Collections.emptyMap());
+    }
+
     Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         checkTokens(tokens, customVariables);
 

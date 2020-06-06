@@ -41,7 +41,7 @@ public class Operators {
         OPERATORS.put("*", new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
             @Override
             public double apply(double... args) {
-                return args[0];
+                return args[0] * args[1];
             }
         });
         OPERATORS.put("/", new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {

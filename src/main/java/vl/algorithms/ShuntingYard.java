@@ -29,7 +29,7 @@ public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
                 case OPERATOR:
                     while (!stack.isEmpty() && stack.peek().getTokenType().equals(TokenType.OPERATOR)) {
                         Operator o1 = ((ValueToken<Operator>) token).getValue();
-                        Operator o2 = ((ValueToken<Operator>) token).getValue();
+                        Operator o2 = ((ValueToken<Operator>) stack.peek()).getValue();
                         if (o1.getNumOperands() == 1 && o2.getNumOperands() == 2) {
                             break;
                         } else if ((o1.isLeftAssociative() && o1.getPrecedence() <= o2.getPrecedence()) || o1.getPrecedence() < o2.getPrecedence()) {

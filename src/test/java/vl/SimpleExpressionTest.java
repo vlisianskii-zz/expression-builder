@@ -31,6 +31,22 @@ public class SimpleExpressionTest {
         table.addValue(2021, "B", 2.0);
     }
 
+
+    @Test
+    public void return_single_result_for_numbers() {
+        // setup
+        String expressionName = "expression with numbers";
+        SimpleExpression expression = new SimpleExpression(expressionName, "1+(-2/3)*4", algorithm);
+        // action
+        Result<Integer, String> result = expression.calculate();
+        // verify
+        assertThat(result).isEqualTo(Result.<Integer, String>builder()
+                .name(expressionName)
+                .value(-1.6666666666666665)
+                .build()
+        );
+    }
+
     @Test
     public void return_single_result_for_simple_table() {
         // setup
@@ -86,7 +102,7 @@ public class SimpleExpressionTest {
         assertThat(result).isEqualTo(Result.<Integer, String>builder()
                 .x(2020)
                 .name(expressionName)
-                .value(2.275)
+                .value(0.91)
                 .build()
         );
     }
@@ -115,6 +131,22 @@ public class SimpleExpressionTest {
                         .name(expressionName)
                         .value(null)
                         .build()
+        );
+    }
+
+    @Test
+    public void return_single_result_for_constant_variables() {
+        // setup
+        String expressionName = "expression with constants";
+        SimpleExpression expression = new SimpleExpression(expressionName, "MONTHS_COUNT/PI", algorithm);
+        // action
+        Result<Integer, String> result = expression.calculate();
+        System.out.println(result);
+        // verify
+        assertThat(result).isEqualTo(Result.<Integer, String>builder()
+                .name(expressionName)
+                .value(3.819718638570153)
+                .build()
         );
     }
 }
