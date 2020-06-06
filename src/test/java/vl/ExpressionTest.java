@@ -2,7 +2,6 @@ package vl;
 
 import org.junit.Test;
 import vl.algorithms.*;
-import vl.exception.NotEnoughDataException;
 import vl.function.Function;
 import vl.function.NextFunction;
 import vl.table.Result;
@@ -40,10 +39,10 @@ public class ExpressionTest {
         Map<String, Double> customVariable = newHashMap();
         customVariable.put("X", 30.1);
 
-        AbstractExpression<Integer, String> safeExpression = new SafeExpression("SAFE", "X / (next(C) * C)", algorithm, functions);
-        System.out.println("Traverse by x: " + safeExpression);
+        AbstractExpression<Integer, String> complexExpression = new ComplexExpression("COMPLEX", "X / (next(C) * C)", algorithm, functions);
+        System.out.println("Traverse by x: " + complexExpression);
         table.traverse((x) -> {
-            Result<Integer, String> result = safeExpression.calculate(table, x, customVariable);
+            Result<Integer, String> result = complexExpression.calculate(table, x, customVariable);
             if (!result.isEmpty()) {
                 System.out.println(result);
             }

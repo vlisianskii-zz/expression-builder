@@ -13,10 +13,10 @@ import vl.token.TokenType;
 import java.util.List;
 import java.util.Map;
 
-public class SafeExpression extends AbstractExpression<Integer, String> {
+public class ComplexExpression extends AbstractExpression<Integer, String> {
     private String tokenName;
 
-    public SafeExpression(String name, String expression, TokenAlgorithm<Integer, String> algorithm, Function<Integer, String>[] functions) {
+    public ComplexExpression(String name, String expression, TokenAlgorithm<Integer, String> algorithm, Function<Integer, String>[] functions) {
         super(name, expression, algorithm, functions);
     }
 
