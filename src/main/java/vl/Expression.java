@@ -12,7 +12,7 @@ public class Expression extends AbstractExpression<Integer, String> {
     }
 
     @Override
-    protected Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name) {
+    public Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name) {
         try {
             return super.compute(table, x, y, name);
         } catch (NotEnoughDataException ignore) {

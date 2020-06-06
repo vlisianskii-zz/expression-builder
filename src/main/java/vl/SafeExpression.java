@@ -11,6 +11,7 @@ import vl.token.Token;
 import vl.token.TokenType;
 
 import java.util.List;
+import java.util.Map;
 
 public class SafeExpression extends AbstractExpression<Integer, String> {
     private String tokenName;
@@ -20,10 +21,10 @@ public class SafeExpression extends AbstractExpression<Integer, String> {
     }
 
     @Override
-    protected Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name) {
+    protected Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name, Map<String, Double> customVariables) {
         try {
             clearTokens();
-            return super.compute(table, x, y, name);
+            return super.compute(table, x, y, name, customVariables);
         } catch (NotEnoughDataException e) {
             Double value = table.getValue(x, tokenName);
             return buildResult(x, tokenName, value, tokenName);
@@ -57,7 +58,8 @@ public class SafeExpression extends AbstractExpression<Integer, String> {
                 .build();
     }
 
-    protected void checkTokens(List<Token<Object>> tokens) {
+    @Override
+    protected void checkTokens(List<Token<Object>> tokens, Map<String, Double> customVariables) {
         if (tokens.stream()
                 .filter(t -> t.getTokenType().equals(TokenType.VARIABLE) || t.getTokenType().equals(TokenType.FUNCTION))
                 .map(t -> {
@@ -66,6 +68,7 @@ public class SafeExpression extends AbstractExpression<Integer, String> {
                     }
                     return t.getArguments();
                 })
+                .filter(v -> !customVariables.containsKey(v))
                 .distinct()
                 .count() > 1) {
             throw new InvalidExpressionException("All VARIABLE tokens must be distinct for this type of expression");

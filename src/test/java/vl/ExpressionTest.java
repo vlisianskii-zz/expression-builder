@@ -9,6 +9,10 @@ import vl.table.Result;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;
 
+import java.util.Map;
+
+import static com.google.common.collect.Maps.newHashMap;
+
 public class ExpressionTest {
     @Test
     public void test() {
@@ -33,10 +37,13 @@ public class ExpressionTest {
             }
         });
 
-        AbstractExpression<Integer, String> safeExpression = new SafeExpression("SAFE", "next(C) * C", algorithm, functions);
+        Map<String, Double> customVariable = newHashMap();
+        customVariable.put("X", 30.1);
+
+        AbstractExpression<Integer, String> safeExpression = new SafeExpression("SAFE", "X / (next(C) * C)", algorithm, functions);
         System.out.println("Traverse by x: " + safeExpression);
         table.traverse((x) -> {
-            Result<Integer, String> result = safeExpression.calculate(table, x);
+            Result<Integer, String> result = safeExpression.calculate(table, x, customVariable);
             if (!result.isEmpty()) {
                 System.out.println(result);
             }

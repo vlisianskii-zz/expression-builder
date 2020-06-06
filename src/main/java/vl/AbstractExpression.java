@@ -12,10 +12,7 @@ import vl.table.Result;
 import vl.table.ValueTable;
 import vl.token.Token;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Stack;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -36,18 +33,23 @@ public abstract class AbstractExpression<X, Y> {
         this.tokens = algorithm.tokenize(expression, functions);
         this.constants = stream(Constants.values())
                 .collect(Collectors.toMap(Constants::name, Constants::getValue));
-        checkTokens(tokens);
     }
 
-    public Result<X, Y> calculate(ValueTable<X, Y> table, X x) {
-        return calculate(table, x, null);
+    public Result<X, Y> calculate(ValueTable<X, Y> table, X x, Map<String, Double> customVariables) {
+        return compute(table, x, null, name, customVariables);
     }
 
     public Result<X, Y> calculate(ValueTable<X, Y> table, X x, Y y) {
         return compute(table, x, y, name);
     }
 
-    protected Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name) {
+    Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name) {
+        return compute(table, x, y, name, Collections.emptyMap());
+    }
+
+    Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name, Map<String, Double> customVariables) {
+        checkTokens(tokens, customVariables);
+
         Stack<Double> output = new Stack<>();
         for (Token<Object> token : tokens) {
             switch (token.getTokenType()) {
@@ -61,7 +63,7 @@ public abstract class AbstractExpression<X, Y> {
                     output.push(applyFunction((Function) token.getValue(), token, table, x, y));
                     break;
                 case VARIABLE:
-                    output.push(applyVariable(token, table, x, y));
+                    output.push(applyVariable(token, table, x, y, customVariables));
                     break;
                 default:
                     throw new InvalidTokenException("Unable to parse token: " + token);
@@ -83,10 +85,13 @@ public abstract class AbstractExpression<X, Y> {
                 .build();
     }
 
-    private Double applyVariable(Token<Object> token, ValueTable<X, Y> table, X x, Y y) {
+    private Double applyVariable(Token<Object> token, ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         String tokenName = (String) token.getValue();
         if (constants.containsKey(tokenName)) {
             return constants.get(tokenName);
+        }
+        if (customVariables.containsKey(tokenName)) {
+            return customVariables.get(tokenName);
         }
         return getValueFromTable(table, x, y, tokenName);
     }
@@ -124,7 +129,7 @@ public abstract class AbstractExpression<X, Y> {
         return o.apply(arg);
     }
 
-    protected void checkTokens(List<Token<Object>> tokens) { }
+    protected void checkTokens(List<Token<Object>> tokens, Map<String, Double> customVariables) { }
 
     @Override
     public String toString() {
