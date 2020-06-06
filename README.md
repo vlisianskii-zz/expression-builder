@@ -28,12 +28,12 @@ More examples:
 // create Shunting Yard algorithm to build expression
 TokenAlgorithm<Integer, String> algorithm = new ShuntingYard<>();
 
-SimpleExpression expression = new SimpleExpression(expressionName, "1+(-2/3)*4", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "1+(-2/3)*4", algorithm);
 // compute basic expression
 Result<Integer, String> result = expression.calculate();
 
 // Output
-Result(x=null, y=null, value=-1.6666666666666665, name=AB)                                        
+Result(x=null, y=null, value=-1.6666666666666665, name=<name>)                                        
 ```
 
 #### Simple table
@@ -50,12 +50,12 @@ table.addValue(2020, "B", 4.0);
 table.addValue(2021, "A", 1.0);
 
 // build simple expression
-SimpleExpression expression = new SimpleExpression("AB", "2 / (A + B)", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "2 / (A + B)", algorithm);
 // compute expression for 2020 
 Result<Integer, String> result = expression.calculate(table, 2020);
 
 // Output
-Result(x=2020, y=null, value=0.2857142857142857, name=AB)
+Result(x=2020, y=null, value=0.2857142857142857, name=<name>)
 ```
 
 #### Traverse by X axis 
@@ -67,8 +67,8 @@ table.traverse((x) -> {
 });
 
 // Output
-Result(x=2020, y=null, value=0.2857142857142857, name=AB)
-Result(x=2021, y=null, value=0.6666666666666666, name=AB)
+Result(x=2020, y=null, value=0.2857142857142857, name=<name>)
+Result(x=2021, y=null, value=0.6666666666666666, name=<name>)
 ```
 
 #### Functions
@@ -76,14 +76,14 @@ Result(x=2021, y=null, value=0.6666666666666666, name=AB)
 ```java
 // Function 'next' returns next value in the table based on current position
 Function<Integer, String>[] functions = new Function[]{new NextFunction()};
-SimpleExpression expression = new SimpleExpression(expressionName, "A - next(B)", algorithm, functions);
+SimpleExpression expression = new SimpleExpression(<name>, "A - next(B)", algorithm, functions);
 table.traverse((x) -> {
     Result<Integer, String> result = expression.calculate(table, x);
 });
 
 // Output
-Result(x=2020, y=null, value=1.0, name=expression with next function)
-Result(x=2021, y=null, value=null, name=expression with next function) // there is no 'next' value for current 2021 by X axis
+Result(x=2020, y=null, value=1.0, name=<name>)
+Result(x=2021, y=null, value=null, name=<name>) // there is no 'next' value for current 2021 by X axis
 ```
 
 #### Custom variables
@@ -93,22 +93,22 @@ Result(x=2021, y=null, value=null, name=expression with next function) // there 
 Map<String, Double> customVariable = newHashMap();
 customVariable.put("X", 12.1);
 
-SimpleExpression expression = new SimpleExpression("X_AB", "(X - A)/B * 0.4", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "(X - A)/B * 0.4", algorithm);
 // add custom variables into compute engine
 Result<Integer, String> result = expression.calculate(table, 2020, customVariable);
 
 // Output 
-Result(x=2020, y=null, value=0.91, name=X_AB)
+Result(x=2020, y=null, value=0.91, name=<name>)
 ```
 
 #### Constants
 
 ```java
-SimpleExpression expression = new SimpleExpression(expressionName, "MONTHS_COUNT/PI", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "MONTHS_COUNT/PI", algorithm);
 Result<Integer, String> result = expression.calculate();
 
 // Output  
-Result(x=null, y=null, value=3.819718638570153, name=expression with constants)
+Result(x=null, y=null, value=3.819718638570153, name=<name>)
 ```
 
 ### Tricky Expression
@@ -118,15 +118,15 @@ Used to compute expressions for all values in the table. Traverses by X and Y ax
 ```java
 Function<Integer, String>[] functions = new Function[]{new PriorFunction()};
 // compute engine replaces word "self" by current cell
-TrickyExpression expression = new TrickyExpression(expressionName, "prior(self)/self", algorithm, functions);
+TrickyExpression expression = new TrickyExpression(<name>, "prior(self)/self", algorithm, functions);
 // traverse by X and Y
 table.traverseEach((x, y) -> {
     Result<Integer, String> result = expression.calculate(table, x, y);
 });
 
 // Output  
-Result(x=2020, y=A, value=3.0, name=tricky expression)
-Result(x=2020, y=B, value=4.0, name=tricky expression)
-Result(x=2021, y=A, value=3.0, name=tricky expression)
-Result(x=2021, y=B, value=1.8181818181818181, name=tricky expression)
+Result(x=2020, y=A, value=3.0, name=<name>)
+Result(x=2020, y=B, value=4.0, name=<name>)
+Result(x=2021, y=A, value=3.0, name=<name>)
+Result(x=2021, y=B, value=1.8181818181818181, name=<name>)
 ```
