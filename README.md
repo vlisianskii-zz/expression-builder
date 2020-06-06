@@ -22,7 +22,7 @@ More examples:
 - [Simple Expression Tests](https://github.com/vlisianskii/expression-builder/blob/master/src/test/java/vl/SimpleExpressionTest.java)
 - [Tricky Expression Tests](https://github.com/vlisianskii/expression-builder/blob/master/src/test/java/vl/TrickyExpressionTest.java) 
 
-#### Basic expression
+### Basic expression
 
 ```java
 // create Shunting Yard algorithm to build expression
@@ -72,8 +72,6 @@ Result(x=2021, y=null, value=0.6666666666666666, name=AB)
 ```
 
 #### Functions
-
-
 
 ```java
 // Function 'next' returns next value in the table based on current position
