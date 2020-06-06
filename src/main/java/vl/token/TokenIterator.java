@@ -1,6 +1,5 @@
 package vl.token;
 
-import lombok.AllArgsConstructor;
 import vl.exception.InvalidTokenException;
 import vl.function.Function;
 import vl.operator.Operator;
@@ -18,7 +17,6 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
-@AllArgsConstructor
 public class TokenIterator<X, Y> implements Iterator<ExpressionToken> {
     private final char[] expression;
     private final Map<String, Function<X, Y>> functions;

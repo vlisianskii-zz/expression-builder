@@ -3,7 +3,10 @@ package vl.token;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import vl.exception.InvalidTokenException;
+import vl.function.Function;
+import vl.function.NextFunction;
 import vl.operator.Operators;
+import vl.token.tokens.ArgumentToken;
 import vl.token.tokens.ExpressionToken;
 import vl.token.tokens.SimpleToken;
 import vl.token.tokens.ValueToken;
@@ -13,6 +16,8 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenIteratorTest {
+    private static final Function<Integer, String> NEXT_FUNCTION = new NextFunction();
+
     @Test
     public void return_tokens_when_simple_sum_expression() {
         assertTokenIterator("7 + 3", new ExpressionToken[]{
@@ -71,6 +76,11 @@ public class TokenIteratorTest {
         assertTokenIterator("1 2", null);
     }
 
+    @Test(expected = InvalidTokenException.class)
+    public void throw_exception_when_unsupported_token() {
+        assertTokenIterator("1+&", null);
+    }
+
     @Test
     public void return_tokens_with_variables() {
         assertTokenIterator("(A*B)/ 3", new ExpressionToken[]{
@@ -82,6 +92,22 @@ public class TokenIteratorTest {
                 getOperator('/', 2),
                 getNumber(3.0)
         });
+    }
+
+    @Test
+    public void return_tokens_with_functions() {
+        assertTokenIterator("(next(B)/next(A))", new ExpressionToken[]{
+                        getOpenParentheses(),
+                        getFunction("B"),
+                        getOperator('/', 2),
+                        getFunction("A"),
+                        getCloseParentheses()
+                },
+                new Function[]{NEXT_FUNCTION});
+    }
+
+    private ExpressionToken getFunction(String argument) {
+        return new ArgumentToken<>(TokenType.FUNCTION, NEXT_FUNCTION, argument);
     }
 
     private ExpressionToken getOpenParentheses() {
@@ -105,7 +131,11 @@ public class TokenIteratorTest {
     }
 
     private void assertTokenIterator(String expression, ExpressionToken[] tokens) {
-        TokenIterator<Integer, String> iterator = new TokenIterator<>(expression, null);
+        assertTokenIterator(expression, tokens, null);
+    }
+
+    private void assertTokenIterator(String expression, ExpressionToken[] tokens, Function[] functions) {
+        TokenIterator<Integer, String> iterator = new TokenIterator<>(expression, functions);
 
         List<ExpressionToken> actualTokens = ImmutableList.copyOf(iterator);
 
