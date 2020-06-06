@@ -40,7 +40,7 @@ Result(x=null, y=null, value=-1.6666666666666665, name=AB)
 
 ```java
 // create a table
-//     2020  2021
+//    2020  2021
 //  A  3.0   1.0
 //  B  4.0   2.0                                                                 
 ValueTable<Integer, String> table = new SimpleTable();
@@ -69,6 +69,23 @@ table.traverse((x) -> {
 // Output
 Result(x=2020, y=null, value=0.2857142857142857, name=AB)
 Result(x=2021, y=null, value=0.6666666666666666, name=AB)
+```
+
+#### Functions
+
+
+
+```java
+// Function 'next' returns next value in the table based on current position
+Function<Integer, String>[] functions = new Function[]{new NextFunction()};
+SimpleExpression expression = new SimpleExpression(expressionName, "A - next(B)", algorithm, functions);
+table.traverse((x) -> {
+    Result<Integer, String> result = expression.calculate(table, x);
+});
+
+// Output
+Result(x=2020, y=null, value=1.0, name=expression with next function)
+Result(x=2021, y=null, value=null, name=expression with next function) // there is no 'next' value for current 2021 by X axis
 ```
 
 #### Custom variables
@@ -110,8 +127,8 @@ table.traverseEach((x, y) -> {
 });
 
 // Output  
-esult(x=2020, y=A, value=3.0, name=complex expression)
-Result(x=2020, y=B, value=4.0, name=complex expression)
-Result(x=2021, y=A, value=3.0, name=complex expression)
-Result(x=2021, y=B, value=1.8181818181818181, name=complex expression)
+Result(x=2020, y=A, value=3.0, name=tricky expression)
+Result(x=2020, y=B, value=4.0, name=tricky expression)
+Result(x=2021, y=A, value=3.0, name=tricky expression)
+Result(x=2021, y=B, value=1.8181818181818181, name=tricky expression)
 ```

@@ -117,6 +117,7 @@ public class SimpleExpressionTest {
         // action
         table.traverse((x) -> {
             Result<Integer, String> result = expression.calculate(table, x);
+            System.out.println(result);
             results.add(result);
         });
         // verify

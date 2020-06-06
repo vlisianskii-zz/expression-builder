@@ -33,7 +33,7 @@ public class TrickyExpressionTest {
     @Test
     public void return_single_result_for_simple_table() {
         // setup
-        String expressionName = "complex expression";
+        String expressionName = "tricky expression";
         Function<Integer, String>[] functions = new Function[]{new PriorFunction()};
         TrickyExpression expression = new TrickyExpression(expressionName, "prior(self)/self", algorithm, functions);
         List<Result<Integer, String>> results = newArrayList();
