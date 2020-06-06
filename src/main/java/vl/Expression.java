@@ -4,6 +4,7 @@ import vl.algorithms.TokenAlgorithm;
 import vl.constant.Constants;
 import vl.exception.InvalidExpressionException;
 import vl.exception.InvalidTokenException;
+import vl.function.Coordinates;
 import vl.function.Function;
 import vl.operator.Operator;
 import vl.table.ValueTable;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
+@SuppressWarnings("unchecked")
 public class Expression<X, Y> {
     private final String name;
     private final String expression;
@@ -53,7 +55,7 @@ public class Expression<X, Y> {
                     output.push(applyOperator((Operator)token.getValue(), output));
                     break;
                 case FUNCTION:
-                    output.push(applyFunction((Function)token.getValue(), token, table));
+                    output.push(applyFunction((Function)token.getValue(), token, table, x, y));
                     break;
                 case VARIABLE:
                     output.push(applyVariable(token, table, x, y));
@@ -82,8 +84,12 @@ public class Expression<X, Y> {
         return table.getValue(x, y);
     }
 
-    private Double applyFunction(Function<X, Y> function, Token<Object> token, ValueTable<X, Y> table) {
-        return function.apply(token, table);
+    private Double applyFunction(Function<X, Y> function, Token<Object> token, ValueTable<X, Y> table, X x, Y y) {
+        Coordinates<X, Y> coordinates = Coordinates.<X, Y>builder()
+                .x(x)
+                .y(isNull(y) ? (Y)token.getArguments() : y)
+                .build();
+        return function.apply(token, table, coordinates);
     }
 
     private Double applyNumber(Double v) {

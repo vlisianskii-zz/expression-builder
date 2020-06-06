@@ -10,5 +10,5 @@ import vl.token.Token;
 public abstract class Function<X, Y> {
     private final String name;
 
-    public abstract double apply(Token<Object> token, ValueTable<X, Y> table);
+    public abstract double apply(Token<Object> token, ValueTable<X, Y> table, Coordinates<X, Y> coordinates);
 }
