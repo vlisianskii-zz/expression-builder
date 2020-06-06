@@ -19,7 +19,6 @@ import java.util.Stack;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
-import static java.util.Objects.isNull;
 
 @Getter
 public abstract class AbstractExpression<X, Y> {
@@ -37,6 +36,7 @@ public abstract class AbstractExpression<X, Y> {
         this.tokens = algorithm.tokenize(expression, functions);
         this.constants = stream(Constants.values())
                 .collect(Collectors.toMap(Constants::name, Constants::getValue));
+        checkTokens(tokens);
     }
 
     public Result<X, Y> calculate(ValueTable<X, Y> table, X x) {
@@ -44,7 +44,10 @@ public abstract class AbstractExpression<X, Y> {
     }
 
     public Result<X, Y> calculate(ValueTable<X, Y> table, X x, Y y) {
-        // add object with X and Y alwasys
+        return compute(table, x, y, name);
+    }
+
+    protected Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name) {
         Stack<Double> output = new Stack<>();
         for (Token<Object> token : tokens) {
             switch (token.getTokenType()) {
@@ -68,6 +71,10 @@ public abstract class AbstractExpression<X, Y> {
         if (!output.isEmpty()) {
             throw new InvalidExpressionException("Output queue is not empty: " + this);
         }
+        return buildResult(x, y, value, name);
+    }
+
+    public Result<X, Y> buildResult(X x, Y y, Double value, String name) {
         return Result.<X, Y>builder()
                 .x(x)
                 .y(y)
@@ -77,23 +84,27 @@ public abstract class AbstractExpression<X, Y> {
     }
 
     private Double applyVariable(Token<Object> token, ValueTable<X, Y> table, X x, Y y) {
-        String name = (String) token.getValue();
-        if (constants.containsKey(name)) {
-            return constants.get(name);
+        String tokenName = (String) token.getValue();
+        if (constants.containsKey(tokenName)) {
+            return constants.get(tokenName);
         }
+        return getValueFromTable(table, x, y, tokenName);
+    }
 
-        if (isNull(y)) {
-            return table.getValue(x, (Y)name);
-        }
+    protected Double getValueFromTable(ValueTable<X, Y> table, X x, Y y, String tokenName) {
         return table.getValue(x, y);
     }
 
     private Double applyFunction(Function<X, Y> function, Token<Object> token, ValueTable<X, Y> table, X x, Y y) {
-        Coordinates<X, Y> coordinates = Coordinates.<X, Y>builder()
-                .x(x)
-                .y(isNull(y) ? (Y)token.getArguments() : y)
-                .build();
+        Coordinates<X, Y> coordinates = getCoordinates(x, y, token.getArguments());
         return function.apply(token, table, coordinates);
+    }
+
+    protected Coordinates<X, Y> getCoordinates(X x, Y y, String arguments) {
+        return Coordinates.<X, Y>builder()
+                .x(x)
+                .y(y)
+                .build();
     }
 
     private Double applyNumber(Double v) {
@@ -112,6 +123,8 @@ public abstract class AbstractExpression<X, Y> {
         double arg = output.pop();
         return o.apply(arg);
     }
+
+    protected void checkTokens(List<Token<Object>> tokens) { }
 
     @Override
     public String toString() {

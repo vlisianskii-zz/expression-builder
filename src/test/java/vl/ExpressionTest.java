@@ -14,8 +14,6 @@ public class ExpressionTest {
     public void test() {
         Function<Integer, String>[] functions = new Function[]{new NextFunction()};
         TokenAlgorithm<Integer, String> algorithm = new ShuntingYard<>();
-        String name = "AB";
-        String expression = "A + next(B)";
 
         ValueTable<Integer, String> table = new SimpleTable();
         table.addValue(2000, "A", 3.0);
@@ -26,21 +24,24 @@ public class ExpressionTest {
         table.addValue(2001, "B", 2.0);
         table.addValue(2001, "C", 2.5);
 
-
-        AbstractExpression<Integer, String> e1 = new SafeExpression(name, expression, algorithm, functions);
-        System.out.println("Traverse by x");
-        table.traverse((x) -> {
-            Result<Integer, String> result = e1.calculate(table, x);
-            System.out.println(result);
-        });
-
-        AbstractExpression<Integer, String> e2 = new Expression(name, expression, algorithm, functions);
-        System.out.println("Traverse each cell");
+        AbstractExpression<Integer, String> simpleExpression = new Expression("AB", "A + next(B)", algorithm, functions);
+        System.out.println("Traverse each cell: " + simpleExpression);
         table.traverseEach((x, y) -> {
-            try {
-                Result<Integer, String> result = e2.calculate(table, x, y);
+            Result<Integer, String> result = simpleExpression.calculate(table, x, y);
+            if (!result.isEmpty()) {
                 System.out.println(result);
-            } catch (NotEnoughDataException ignore) {}
+            }
         });
+
+        AbstractExpression<Integer, String> safeExpression = new SafeExpression("SAFE", "next(C) * C", algorithm, functions);
+        System.out.println("Traverse by x: " + safeExpression);
+        table.traverse((x) -> {
+            Result<Integer, String> result = safeExpression.calculate(table, x);
+            if (!result.isEmpty()) {
+                System.out.println(result);
+            }
+        });
+
+
     }
 }

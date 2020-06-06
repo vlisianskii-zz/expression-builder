@@ -12,11 +12,15 @@ public class Expression extends AbstractExpression<Integer, String> {
     }
 
     @Override
-    public Result<Integer, String> calculate(ValueTable<Integer, String> table, Integer x, String y) {
+    protected Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name) {
         try {
-            return super.calculate(table, x, y);
+            return super.compute(table, x, y, name);
         } catch (NotEnoughDataException ignore) {
-            return Result.empty();
+            return Result.<Integer, String>builder()
+                    .x(x)
+                    .y(y)
+                    .name(name)
+                    .build();
         }
     }
 }
