@@ -7,8 +7,10 @@ import vl.function.Coordinates;
 import vl.function.Function;
 import vl.table.Result;
 import vl.table.ValueTable;
-import vl.token.Token;
 import vl.token.TokenType;
+import vl.token.tokens.ExpressionToken;
+import vl.token.tokens.ArgumentToken;
+import vl.token.tokens.ValueToken;
 
 import java.util.List;
 import java.util.Map;
@@ -58,14 +60,14 @@ public class TrickyExpression extends AbstractExpression<Integer, String> {
     }
 
     @Override
-    protected void checkTokens(List<Token<Object>> tokens, Map<String, Double> customVariables) {
+    protected void checkTokens(List<ExpressionToken> tokens, Map<String, Double> customVariables) {
         if (tokens.stream()
                 .filter(t -> t.getTokenType().equals(TokenType.VARIABLE) || t.getTokenType().equals(TokenType.FUNCTION))
                 .map(t -> {
                     if (t.getTokenType().equals(TokenType.VARIABLE)) {
-                        return (String)t.getValue();
+                        return ((ValueToken<String>) t).getValue();
                     }
-                    return t.getArguments();
+                    return ((ArgumentToken<String>) t).getArguments();
                 })
                 .filter(v -> !customVariables.containsKey(v))
                 .distinct()

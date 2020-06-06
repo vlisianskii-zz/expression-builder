@@ -5,6 +5,10 @@ import vl.exception.InvalidTokenException;
 import vl.function.Function;
 import vl.operator.Operator;
 import vl.operator.Operators;
+import vl.token.tokens.ExpressionToken;
+import vl.token.tokens.ArgumentToken;
+import vl.token.tokens.SimpleToken;
+import vl.token.tokens.ValueToken;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -15,12 +19,12 @@ import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
 @AllArgsConstructor
-public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
+public class TokenIterator<X, Y> implements Iterator<ExpressionToken> {
     private final char[] expression;
     private final Map<String, Function<X, Y>> functions;
 
     private int pointer = 0;
-    private Token<Object> lastToken;
+    private ExpressionToken lastToken;
 
     public TokenIterator(String expression, Function<X, Y>[] functions) {
         this.expression = expression.trim().toCharArray();
@@ -35,14 +39,14 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
     }
 
     @Override
-    public Token<Object> next() {
+    public ExpressionToken next() {
         char c = skipWhiteSpaces();
-        Token<Object> token = getNextToken(c);
+        ExpressionToken token = getNextToken(c);
         lastToken = token;
         return token;
     }
 
-    private Token<Object> getNextToken(char c) {
+    private ExpressionToken getNextToken(char c) {
         if (TokenIdentifier.isNumber(c)) {
             return number(c);
         } else if (TokenIdentifier.isOpenParentheses(c)) {
@@ -57,7 +61,7 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
         throw new InvalidTokenException(String.format("Unable to parse char '%s' at [%s]", c, pointer));
     }
 
-    private Token<Object> functionOrVariable() {
+    private ExpressionToken functionOrVariable() {
         int offset = pointer;
         int length = 1;
 
@@ -71,15 +75,15 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
                     sb.append(expression[++pointer]);
                 }
                 pointer++;
-                return Token.create(f, TokenType.FUNCTION, sb.substring(1, sb.length() - 1));
+                return new ArgumentToken<>(TokenType.FUNCTION, f, sb.substring(1, sb.length() - 1));
             }
             length++;
             pointer++;
         }
-        return Token.create(name, TokenType.VARIABLE);
+        return new ValueToken<>(TokenType.VARIABLE, name);
     }
 
-    private Token<Object> operator(char c) {
+    private ExpressionToken operator(char c) {
         int offset = pointer;
         int length = 1;
         StringBuilder sb = new StringBuilder();
@@ -99,7 +103,7 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
                 } else {
                     TokenType lastTokenType = lastToken.getTokenType();
                     if (lastTokenType.equals(TokenType.OPERATOR)) {
-                        Operator lastOperator = (Operator) lastToken.getValue();
+                        Operator lastOperator = ((ValueToken<Operator>) lastToken).getValue();
                         if (lastOperator.getNumOperands() == 2 || (lastOperator.getNumOperands() == 1 && !lastOperator.isLeftAssociative())) {
                             argc = 1;
                         }
@@ -118,10 +122,10 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
         }
 
         pointer += sb.length();
-        return Token.create(lastValid, TokenType.OPERATOR);
+        return new ValueToken<>(TokenType.OPERATOR, lastValid);
     }
 
-    private Token<Object> number(char c) {
+    private ExpressionToken number(char c) {
         if (lastToken != null && lastToken.getTokenType().equals(TokenType.NUMBER)) {
             throw new InvalidTokenException(String.format("Unable to parse char '%s' at [%s]", c, pointer));
         }
@@ -130,24 +134,24 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
         pointer++;
         if (isEnd(offset + length)) {
             double value = Double.parseDouble(String.valueOf(expression, offset, length));
-            return Token.create(value, TokenType.NUMBER);
+            return new ValueToken<>(TokenType.NUMBER, value);
         }
         while (!isEnd(offset + length) && TokenIdentifier.isNumber(expression[offset + length])) {
             length++;
             pointer++;
         }
         double value = Double.parseDouble(String.valueOf(expression, offset, length));
-        return Token.create(value, TokenType.NUMBER);
+        return new ValueToken<>(TokenType.NUMBER, value);
     }
 
-    private Token<Object> openParentheses() {
+    private ExpressionToken openParentheses() {
         pointer++;
-        return Token.create(TokenType.PARENTHESES_OPEN);
+        return new SimpleToken(TokenType.PARENTHESES_OPEN);
     }
 
-    private Token<Object> closeParentheses() {
+    private ExpressionToken closeParentheses() {
         pointer++;
-        return Token.create(TokenType.PARENTHESES_CLOSE);
+        return new SimpleToken(TokenType.PARENTHESES_CLOSE);
     }
 
     private char skipWhiteSpaces() {

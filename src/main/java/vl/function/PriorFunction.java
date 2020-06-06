@@ -1,7 +1,7 @@
 package vl.function;
 
 import vl.table.ValueTable;
-import vl.token.Token;
+import vl.token.tokens.ArgumentToken;
 
 public class PriorFunction extends Function<Integer, String> {
     public PriorFunction() {
@@ -9,7 +9,7 @@ public class PriorFunction extends Function<Integer, String> {
     }
 
     @Override
-    public double apply(Token<Object> token, ValueTable<Integer, String> table, Coordinates<Integer, String> coordinates) {
+    public double apply(ArgumentToken<Function<Integer, String>> token, ValueTable<Integer, String> table, Coordinates<Integer, String> coordinates) {
         return table.getValue(coordinates.getX() - 1, coordinates.getY());
     }
 }

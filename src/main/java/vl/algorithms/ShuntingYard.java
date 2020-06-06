@@ -4,21 +4,22 @@ import vl.exception.InvalidTokenException;
 import vl.exception.MismatchParenthesesException;
 import vl.function.Function;
 import vl.operator.Operator;
-import vl.token.Token;
 import vl.token.TokenIterator;
 import vl.token.TokenType;
+import vl.token.tokens.ExpressionToken;
+import vl.token.tokens.ValueToken;
 
 import java.util.*;
 
 public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
     @Override
-    public List<Token<Object>> tokenize(String expression, Function<X, Y>[] functions) {
-        Stack<Token<Object>> stack = new Stack<>();
-        List<Token<Object>> queue = new ArrayList<>();
+    public List<ExpressionToken> tokenize(String expression, Function<X, Y>[] functions) {
+        Stack<ExpressionToken> stack = new Stack<>();
+        List<ExpressionToken> queue = new ArrayList<>();
 
-        Iterator<Token<Object>> iterator = new TokenIterator<>(expression, functions);
+        Iterator<ExpressionToken> iterator = new TokenIterator<>(expression, functions);
         while (iterator.hasNext()) {
-            Token<Object> token = iterator.next();
+            ExpressionToken token = iterator.next();
             switch (token.getTokenType()) {
                 case NUMBER:
                 case VARIABLE:
@@ -27,8 +28,8 @@ public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
                     break;
                 case OPERATOR:
                     while (!stack.isEmpty() && stack.peek().getTokenType().equals(TokenType.OPERATOR)) {
-                        Operator o1 = (Operator) token.getValue();
-                        Operator o2 = (Operator) stack.peek().getValue();
+                        Operator o1 = ((ValueToken<Operator>) token).getValue();
+                        Operator o2 = ((ValueToken<Operator>) token).getValue();
                         if (o1.getNumOperands() == 1 && o2.getNumOperands() == 2) {
                             break;
                         } else if ((o1.isLeftAssociative() && o1.getPrecedence() <= o2.getPrecedence()) || o1.getPrecedence() < o2.getPrecedence()) {
@@ -61,7 +62,7 @@ public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
         }
 
         while (!stack.empty()) {
-            Token<Object> t = stack.pop();
+            ExpressionToken t = stack.pop();
             if (t.getTokenType().equals(TokenType.PARENTHESES_CLOSE) || t.getTokenType().equals(TokenType.PARENTHESES_OPEN)) {
                 throw new MismatchParenthesesException(expression);
             } else {

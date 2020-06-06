@@ -1,10 +1,10 @@
 package vl.algorithms;
 
 import vl.function.Function;
-import vl.token.Token;
+import vl.token.tokens.ExpressionToken;
 
 import java.util.List;
 
 public interface TokenAlgorithm<X, Y> {
-    List<Token<Object>> tokenize(String expression, Function<X, Y>[] functions);
+    List<ExpressionToken> tokenize(String expression, Function<X, Y>[] functions);
 }

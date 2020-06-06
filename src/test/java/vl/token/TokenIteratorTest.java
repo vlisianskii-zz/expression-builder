@@ -4,63 +4,65 @@ import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import vl.exception.InvalidTokenException;
 import vl.operator.Operators;
+import vl.token.tokens.ExpressionToken;
+import vl.token.tokens.SimpleToken;
+import vl.token.tokens.ValueToken;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("unchecked")
 public class TokenIteratorTest {
     @Test
     public void return_tokens_when_simple_sum_expression() {
-        assertTokenIterator("7 + 3", new Token[]{
-                Token.create(7.0, TokenType.NUMBER),
+        assertTokenIterator("7 + 3", new ExpressionToken[]{
+                getNumber(7.0),
                 getOperator('+', 2),
-                Token.create(3.0, TokenType.NUMBER)
+                getNumber(3.0)
         });
     }
 
     @Test
     public void return_tokens_when_simple_sum_expression_and_no_spaces() {
-        assertTokenIterator("1-0.2", new Token[]{
-                Token.create(1.0, TokenType.NUMBER),
+        assertTokenIterator("1-0.2", new ExpressionToken[]{
+                getNumber(1.0),
                 getOperator('-', 2),
-                Token.create(0.2, TokenType.NUMBER)
+                getNumber(0.2)
         });
     }
 
     @Test
     public void return_tokens_when_simple_sum_of_doubles_expression() {
-        assertTokenIterator("1 * 2.3 / 4.42", new Token[]{
-                Token.create(1.0, TokenType.NUMBER),
+        assertTokenIterator("1 * 2.3 / 4.42", new ExpressionToken[]{
+                getNumber(1.0),
                 getOperator('*', 2),
-                Token.create(2.3, TokenType.NUMBER),
+                getNumber(2.3),
                 getOperator('/', 2),
-                Token.create(4.42, TokenType.NUMBER)
+                getNumber(4.42)
         });
     }
 
     @Test
     public void return_tokens_when_unary_operation() {
-        assertTokenIterator("-8 + (+3)", new Token[]{
+        assertTokenIterator("-8 + (+3)", new ExpressionToken[]{
                 getOperator('-', 1),
-                Token.create(8.0, TokenType.NUMBER),
+                getNumber(8.0),
                 getOperator('+', 2),
-                Token.create(TokenType.PARENTHESES_OPEN),
+                getOpenParentheses(),
                 getOperator('+', 1),
-                Token.create(3.0, TokenType.NUMBER),
-                Token.create(TokenType.PARENTHESES_CLOSE)
+                getNumber(3.0),
+                getCloseParentheses()
         });
     }
 
     @Test
     public void return_tokens_when_unary_operation_without_parentheses() {
-        assertTokenIterator("-8 +-3", new Token[]{
+        assertTokenIterator("-8 +-3", new ExpressionToken[]{
                 getOperator('-', 1),
-                Token.create(8.0, TokenType.NUMBER),
+                getNumber(8.0),
                 getOperator('+', 2),
                 getOperator('-', 1),
-                Token.create(3.0, TokenType.NUMBER)
+                getNumber(3.0)
         });
     }
 
@@ -70,26 +72,42 @@ public class TokenIteratorTest {
     }
 
     @Test
-    public void return_tokens_when_operation_in_parentheses() {
-        assertTokenIterator("(A*B)/ 3", new Token[]{
-                Token.create(TokenType.PARENTHESES_OPEN),
-                Token.create("A", TokenType.VARIABLE),
+    public void return_tokens_with_variables() {
+        assertTokenIterator("(A*B)/ 3", new ExpressionToken[]{
+                getOpenParentheses(),
+                getVariable("A"),
                 getOperator('*', 2),
-                Token.create("B", TokenType.VARIABLE),
-                Token.create(TokenType.PARENTHESES_CLOSE),
+                getVariable("B"),
+                getCloseParentheses(),
                 getOperator('/', 2),
-                Token.create(3.0, TokenType.NUMBER)
+                getNumber(3.0)
         });
     }
 
-    private Token<Object> getOperator(char c, int numArguments) {
-        return Token.create(Operators.getOperator(c, numArguments), TokenType.OPERATOR);
+    private ExpressionToken getOpenParentheses() {
+        return new SimpleToken(TokenType.PARENTHESES_OPEN);
     }
 
-    private void assertTokenIterator(String expression, Token<Object>[] tokens) {
+    private ExpressionToken getCloseParentheses() {
+        return new SimpleToken(TokenType.PARENTHESES_CLOSE);
+    }
+
+    private ExpressionToken getVariable(String value) {
+        return new ValueToken<>(TokenType.VARIABLE, value);
+    }
+
+    private ExpressionToken getNumber(double value) {
+        return new ValueToken<>(TokenType.NUMBER, value);
+    }
+
+    private ExpressionToken getOperator(char c, int numArguments) {
+        return new ValueToken<>(TokenType.OPERATOR, Operators.getOperator(c, numArguments));
+    }
+
+    private void assertTokenIterator(String expression, ExpressionToken[] tokens) {
         TokenIterator<Integer, String> iterator = new TokenIterator<>(expression, null);
 
-        List<Object> actualTokens = ImmutableList.copyOf(iterator);
+        List<ExpressionToken> actualTokens = ImmutableList.copyOf(iterator);
 
         assertThat(actualTokens).isNotNull();
         assertThat(actualTokens).containsExactly(tokens);

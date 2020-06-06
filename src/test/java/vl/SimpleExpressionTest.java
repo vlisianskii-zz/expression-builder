@@ -48,7 +48,5 @@ public class SimpleExpressionTest {
                 System.out.println(result);
             }
         });
-
-
     }
 }
