@@ -35,19 +35,7 @@ public abstract class AbstractExpression<X, Y> {
                 .collect(Collectors.toMap(Constants::name, Constants::getValue));
     }
 
-    public Result<X, Y> calculate(ValueTable<X, Y> table, X x, Map<String, Double> customVariables) {
-        return compute(table, x, null, name, customVariables);
-    }
-
-    public Result<X, Y> calculate(ValueTable<X, Y> table, X x, Y y) {
-        return compute(table, x, y, name);
-    }
-
-    Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name) {
-        return compute(table, x, y, name, Collections.emptyMap());
-    }
-
-    Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, String name, Map<String, Double> customVariables) {
+    Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         checkTokens(tokens, customVariables);
 
         Stack<Double> output = new Stack<>();

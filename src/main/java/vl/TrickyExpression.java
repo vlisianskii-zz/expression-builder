@@ -13,18 +13,17 @@ import vl.token.TokenType;
 import java.util.List;
 import java.util.Map;
 
-public class ComplexExpression extends AbstractExpression<Integer, String> {
+public class TrickyExpression extends AbstractExpression<Integer, String> {
     private String tokenName;
 
-    public ComplexExpression(String name, String expression, TokenAlgorithm<Integer, String> algorithm, Function<Integer, String>[] functions) {
+    public TrickyExpression(String name, String expression, TokenAlgorithm<Integer, String> algorithm, Function<Integer, String>[] functions) {
         super(name, expression, algorithm, functions);
     }
 
-    @Override
-    protected Result<Integer, String> compute(ValueTable<Integer, String> table, Integer x, String y, String name, Map<String, Double> customVariables) {
+    protected Result<Integer, String> calculate(ValueTable<Integer, String> table, Integer x, Map<String, Double> customVariables) {
         try {
             clearTokens();
-            return super.compute(table, x, y, name, customVariables);
+            return super.compute(table, x, null, customVariables);
         } catch (NotEnoughDataException e) {
             Double value = table.getValue(x, tokenName);
             return buildResult(x, tokenName, value, tokenName);

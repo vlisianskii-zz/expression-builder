@@ -63,7 +63,7 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
 
         String name = null;
         while (!isEnd(pointer) && TokenIdentifier.isAlphabetic(expression[pointer])) {
-            name = new String(expression, offset, length);
+            name = String.valueOf(expression, offset, length);
             if (functions.containsKey(name)) {
                 Function<X, Y> f = functions.get(name);
                 StringBuilder sb = new StringBuilder();
