@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 import static java.util.Arrays.stream;
 
 @Getter
-public abstract class AbstractExpression<X, Y> {
+public class AbstractExpression<X, Y> {
     private final String name;
     private final String expression;
     private final List<ExpressionToken> tokens;
