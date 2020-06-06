@@ -22,7 +22,6 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
     private int pointer = 0;
     private Token<Object> lastToken;
 
-
     TokenIterator(String expression, Function<X, Y>[] functions) {
         this.expression = expression.trim().toCharArray();
         this.functions = isNull(functions) ?
@@ -72,12 +71,12 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
                     sb.append(expression[++pointer]);
                 }
                 pointer++;
-                return new Token<>(f, TokenType.FUNCTION, sb.substring(1, sb.length() - 1));
+                return Token.create(f, TokenType.FUNCTION, sb.substring(1, sb.length() - 1));
             }
             length++;
             pointer++;
         }
-        return new Token<>(name, TokenType.VARIABLE);
+        return Token.create(name, TokenType.VARIABLE);
     }
 
     private Token<Object> operator(char c) {
@@ -119,7 +118,7 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
         }
 
         pointer += sb.length();
-        return new Token<>(lastValid, TokenType.OPERATOR);
+        return Token.create(lastValid, TokenType.OPERATOR);
     }
 
     private Token<Object> number(char c) {
@@ -131,24 +130,24 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
         pointer++;
         if (isEnd(offset + length)) {
             double value = Double.parseDouble(String.valueOf(expression, offset, length));
-            return new Token<>(value, TokenType.NUMBER);
+            return Token.create(value, TokenType.NUMBER);
         }
         while (!isEnd(offset + length) && TokenIdentifier.isNumber(expression[offset + length])) {
             length++;
             pointer++;
         }
         double value = Double.parseDouble(String.valueOf(expression, offset, length));
-        return new Token<>(value, TokenType.NUMBER);
+        return Token.create(value, TokenType.NUMBER);
     }
 
     private Token<Object> openParentheses() {
         pointer++;
-        return new Token<>(TokenType.PARENTHESES_OPEN);
+        return Token.create(TokenType.PARENTHESES_OPEN);
     }
 
     private Token<Object> closeParentheses() {
         pointer++;
-        return new Token<>(TokenType.PARENTHESES_CLOSE);
+        return Token.create(TokenType.PARENTHESES_CLOSE);
     }
 
     private char skipWhiteSpaces() {
