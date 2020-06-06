@@ -63,6 +63,6 @@ public class SimpleTable implements ValueTable<Integer, String> {
     }
 
     private void throwNotEnoughData(Integer x, String y) {
-        throw new NotEnoughDataException(String.format("Not enough input data by x='%s' y='%s'", x, y));
+        throw new NotEnoughDataException(x, y);
     }
 }

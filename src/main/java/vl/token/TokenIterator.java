@@ -22,7 +22,7 @@ public class TokenIterator<X, Y> implements Iterator<Token<Object>> {
     private int pointer = 0;
     private Token<Object> lastToken;
 
-    TokenIterator(String expression, Function<X, Y>[] functions) {
+    public TokenIterator(String expression, Function<X, Y>[] functions) {
         this.expression = expression.trim().toCharArray();
         this.functions = isNull(functions) ?
                 Collections.emptyMap() :

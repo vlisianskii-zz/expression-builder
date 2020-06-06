@@ -1,10 +1,12 @@
-package vl.token;
+package vl.algorithms;
 
-import vl.algorithms.TokenAlgorithm;
 import vl.exception.InvalidTokenException;
 import vl.exception.MismatchParenthesesException;
 import vl.function.Function;
 import vl.operator.Operator;
+import vl.token.Token;
+import vl.token.TokenIterator;
+import vl.token.TokenType;
 
 import java.util.*;
 
