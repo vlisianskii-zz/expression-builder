@@ -2,6 +2,7 @@ package vl;
 
 import org.junit.Test;
 import vl.algorithms.*;
+import vl.exception.NotEnoughDataException;
 import vl.function.Function;
 import vl.function.NextFunction;
 import vl.table.Result;
@@ -13,10 +14,8 @@ public class ExpressionTest {
     public void test() {
         Function<Integer, String>[] functions = new Function[]{new NextFunction()};
         TokenAlgorithm<Integer, String> algorithm = new ShuntingYard<>();
-
-        TokenTraverse<Integer, String> simpleTraverse = new SimpleTraverse();
-        TokenTraverse<Integer, String> safeTraverse = new SafeTraverse();
-        AbstractExpression<Integer, String> expression = new Expression("AB", "A + next(B)", algorithm, functions);
+        String name = "AB";
+        String expression = "A + next(B)";
 
         ValueTable<Integer, String> table = new SimpleTable();
         table.addValue(2000, "A", 3.0);
@@ -27,16 +26,21 @@ public class ExpressionTest {
         table.addValue(2001, "B", 2.0);
         table.addValue(2001, "C", 2.5);
 
+
+        AbstractExpression<Integer, String> e1 = new SafeExpression(name, expression, algorithm, functions);
         System.out.println("Traverse by x");
         table.traverse((x) -> {
-            Result<Integer, String> result = expression.calculate(safeTraverse, table, x);
+            Result<Integer, String> result = e1.calculate(table, x);
             System.out.println(result);
         });
 
+        AbstractExpression<Integer, String> e2 = new Expression(name, expression, algorithm, functions);
         System.out.println("Traverse each cell");
         table.traverseEach((x, y) -> {
-            Result<Integer, String> result = expression.calculate(simpleTraverse, table, x, y);
-            System.out.println(result);
+            try {
+                Result<Integer, String> result = e2.calculate(table, x, y);
+                System.out.println(result);
+            } catch (NotEnoughDataException ignore) {}
         });
     }
 }
