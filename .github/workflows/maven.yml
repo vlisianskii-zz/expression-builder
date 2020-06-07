@@ -9,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: Package
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +34,7 @@ jobs:
 #        filename: ./target/expression-builder-1.3-SNAPSHOT.jar
 
   sonar:
-    name: SonarCloud Scan
+    name: SonarCloud
     runs-on: ubuntu-latest
 
     steps:
@@ -43,6 +44,7 @@ jobs:
       with:
         java-version: 1.8
     - name: SonarCloud Scan
-      run: mvn -B clean verify -Psonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+      run: mvn -B clean verify
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
