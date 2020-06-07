@@ -23,8 +23,8 @@ jobs:
     - name: Nexus Repo Publish
       uses: samuelmeuli/action-maven-publish@v1
       with:
-        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
+#        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+#        gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
         nexus_username: ${{ secrets.NEXUS_USERNAME }}
         nexus_password: ${{ secrets.NEXUS_PASSWORD }}
 #      uses: qcastel/github-actions-maven-release@v1.0.3
