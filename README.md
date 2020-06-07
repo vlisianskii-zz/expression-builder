@@ -33,7 +33,7 @@ SimpleExpression expression = new SimpleExpression(<name>, "1+(-2/3)*4", algorit
 Result<Integer, String> result = expression.calculate();
 
 // Output
-Result(x=null, y=null, value=-1.6666666666666665, name=<name>)                                        
+Result(value=-1.6666666666666665, name=<name>)                                        
 ```
 
 #### Simple table
@@ -55,7 +55,7 @@ SimpleExpression expression = new SimpleExpression(<name>, "2 / (A + B)", algori
 Result<Integer, String> result = expression.calculate(table, 2020);
 
 // Output
-Result(x=2020, y=null, value=0.2857142857142857, name=<name>)
+Result(x=2020, value=0.2857142857142857, name=<name>)
 ```
 
 #### Traverse by X axis 
@@ -67,8 +67,8 @@ table.traverse((x) -> {
 });
 
 // Output
-Result(x=2020, y=null, value=0.2857142857142857, name=<name>)
-Result(x=2021, y=null, value=0.6666666666666666, name=<name>)
+Result(x=2020, value=0.2857142857142857, name=<name>)
+Result(x=2021, value=0.6666666666666666, name=<name>)
 ```
 
 #### Functions
@@ -82,8 +82,8 @@ table.traverse((x) -> {
 });
 
 // Output
-Result(x=2020, y=null, value=1.0, name=<name>)
-Result(x=2021, y=null, value=null, name=<name>) // there is no 'next' value for current 2021 by X axis
+Result(x=2020, value=1.0, name=<name>)
+Result(x=2021, value=null, name=<name>) // there is no 'next' value for current 2021 by X axis
 ```
 
 #### Custom variables
@@ -98,7 +98,7 @@ SimpleExpression expression = new SimpleExpression(<name>, "(X - A)/B * 0.4", al
 Result<Integer, String> result = expression.calculate(table, 2020, customVariable);
 
 // Output 
-Result(x=2020, y=null, value=0.91, name=<name>)
+Result(x=2020, value=0.91, name=<name>)
 ```
 
 #### Constants
@@ -108,7 +108,7 @@ SimpleExpression expression = new SimpleExpression(<name>, "MONTHS_COUNT/PI", al
 Result<Integer, String> result = expression.calculate();
 
 // Output  
-Result(x=null, y=null, value=3.819718638570153, name=<name>)
+Result(value=3.819718638570153, name=<name>)
 ```
 
 ### Tricky Expression
