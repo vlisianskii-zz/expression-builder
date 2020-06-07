@@ -22,7 +22,6 @@ import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
 @Getter
-@SuppressWarnings(value = {"squid:S1172", "squid:S1149"})
 public class AbstractExpression<X, Y> {
     private final String name;
     private final String expression;
@@ -48,7 +47,7 @@ public class AbstractExpression<X, Y> {
         return compute(null, null, null, Collections.emptyMap());
     }
 
-    @SuppressWarnings("squid:S1149")
+    @SuppressWarnings("java:S1149")
     Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         checkTokens(tokens, customVariables);
         Stack<Double> output = new Stack<>();
@@ -87,6 +86,7 @@ public class AbstractExpression<X, Y> {
                 .build();
     }
 
+    @SuppressWarnings("java:S1149")
     private void applyVariable(Stack<Double> output, ExpressionToken token, ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         ValueToken<String> t = (ValueToken<String>) token;
 
@@ -105,10 +105,12 @@ public class AbstractExpression<X, Y> {
         output.push(getValueFromTable(table, x, y, tokenName));
     }
 
+    @SuppressWarnings("java:S1172")
     protected Double getValueFromTable(ValueTable<X, Y> table, X x, Y y, String tokenName) {
         return table.getValue(x, y);
     }
 
+    @SuppressWarnings("java:S1149")
     private void applyFunction(Stack<Double> output, ExpressionToken token, ValueTable<X, Y> table, X x, Y y) {
         ArgumentToken<Function<X, Y>> t = (ArgumentToken<Function<X, Y>>) token;
         Coordinates<X, Y> coordinates = getCoordinates(x, y, t.getArguments());
@@ -116,6 +118,7 @@ public class AbstractExpression<X, Y> {
         output.push(function.apply(t, table, coordinates));
     }
 
+    @SuppressWarnings("java:S1172")
     protected Coordinates<X, Y> getCoordinates(X x, Y y, String arguments) {
         return Coordinates.<X, Y>builder()
                 .x(x)
@@ -123,11 +126,13 @@ public class AbstractExpression<X, Y> {
                 .build();
     }
 
+    @SuppressWarnings("java:S1149")
     private void applyNumber(Stack<Double> output, ExpressionToken token) {
         ValueToken<Double> t = (ValueToken<Double>) token;
         output.push(t.getValue());
     }
 
+    @SuppressWarnings("java:S1149")
     private void applyOperator(Stack<Double> output, ExpressionToken token) {
         ValueToken<Operator> t = (ValueToken<Operator>) token;
         Operator o = t.getValue();
