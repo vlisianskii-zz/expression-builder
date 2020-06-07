@@ -52,7 +52,7 @@ Result(value=-1.6666666666666665, name=<name>)
 // create a table
 //    2020  2021
 //  A  3.0   1.0
-//  B  4.0   2.0                                                                 
+//  B  4.0   2.0
 ValueTable<Integer, String> table = new SimpleTable();
 table.addValue(2021, "B", 2.0);
 table.addValue(2020, "A", 3.0);
