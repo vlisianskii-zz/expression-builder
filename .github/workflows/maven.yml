@@ -24,7 +24,7 @@ jobs:
       uses: qcastel/github-actions-maven-release@v1.0.3
       with:
         release-branch-name: "master"
-        gpg-enabled: "false"
+        gpg-enabled: "true"
         gpg-key-id: ${{ secrets.GPG_KEY_ID }}
         gpg-key: ${{ secrets.GPG_KEY }}
         maven-repo-server-id: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
