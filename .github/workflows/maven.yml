@@ -20,17 +20,27 @@ jobs:
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
-    - name: Maven release
-      uses: qcastel/github-actions-maven-release@v1.0.3
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
       with:
-        release-branch-name: "master"
-        gpg-enabled: "true"
-        gpg-key-id: ${{ secrets.GPG_KEY_ID }}
-        gpg-key: ${{ secrets.GPG_KEY }}
-        maven-repo-server-id: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
-        maven-repo-server-username: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
-        maven-repo-server-password: ${{ secrets.MVN_REPO_PRIVATE_REPO_PASSWORD }}
-        maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
-        git-release-bot-name: "vl-bot"
-        git-release-bot-email: "vlisianskii@gmail.com"
-        access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        serverUrl: http://163c6cdd.ngrok.io
+        username: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
+        password: ${{ secrets.MVN_REPO_PRIVATE_REPO_PASSWORD }}
+        format: maven2
+        repository: maven-releases
+        coordinates: groupId=io.github.vlisianskii artifactId=expression-builder version=1.0
+        assets: extension=jar
+        filename: ./target/expression-builder-1.0.jar
+#      uses: qcastel/github-actions-maven-release@v1.0.3
+#      with:
+#        release-branch-name: "master"
+#        gpg-enabled: "true"
+#        gpg-key-id: ${{ secrets.GPG_KEY_ID }}
+#        gpg-key: ${{ secrets.GPG_KEY }}
+#        maven-repo-server-id: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
+#        maven-repo-server-username: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
+#        maven-repo-server-password: ${{ secrets.MVN_REPO_PRIVATE_REPO_PASSWORD }}
+#        maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
+#        git-release-bot-name: "vl-bot"
+#        git-release-bot-email: "vlisianskii@gmail.com"
+#        access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
