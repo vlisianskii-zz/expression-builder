@@ -30,13 +30,13 @@ jobs:
       uses: qcastel/github-actions-maven-release@v1.0.3
       with:
         release-branch-name: "master"
-        gpg-enabled: "false"
-#        gpg-key-id: ${{ secrets.GPG_KEY_ID }}
-#        gpg-key: ${{ secrets.GPG_KEY }}
+        gpg-enabled: "true"
+        gpg-key-id: ${{ secrets.GPG_KEY_ID }}
+        gpg-key: ${{ secrets.GPG_KEY }}
         maven-repo-server-id: ${{ secrets.NEXUS_USERNAME }}
         maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
         maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
         maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
-        git-release-bot-name: "vl-bot"
+        git-release-bot-name: "release-bot"
         git-release-bot-email: "vlisianskii@gmail.com"
         access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
