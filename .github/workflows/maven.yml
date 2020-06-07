@@ -19,3 +19,15 @@ jobs:
         java-version: 1.8
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+        with:
+          serverUrl: https://oss.sonatype.org/
+          username: ${{ secrets.NEXUS_USERNAME }}
+          password: ${{ secrets.NEXUS_PASSWORD }}
+          format: maven2
+          repository: maven-releases
+          coordinates: groupId=io.github.vlisianskii artifactId=expression-builder version=1.3
+          assets: extension=jar
+          filename: ./target/expression-builder-1.3-SNAPSHOT.jar
