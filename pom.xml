@@ -4,7 +4,7 @@
 
     <groupId>io.github.vlisianskii</groupId>
     <artifactId>expression-builder</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1</version>
 
     <url>https://github.com/vlisianskii/expression-builder</url>
     <name>Expression builder</name>
@@ -24,6 +24,8 @@
         <java.version>1.8</java.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <sonar-maven-plugin.version>3.6.0.1398</sonar-maven-plugin.version>
+        <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
+        <nexus-staging-maven-plugin.version>1.5.1</nexus-staging-maven-plugin.version>
 
         <lombok.version>1.18.12</lombok.version>
         <guava.version>28.0-jre</guava.version>
@@ -47,6 +49,16 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>${sonar-maven-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <tagNameFormat>v@{project.version}</tagNameFormat>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <releaseProfiles>release</releaseProfiles>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -77,11 +89,40 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>releases</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>${nexus-staging-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>default-deploy</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>http://localhost:8081/nexus/</nexusUrl>
+                            <skipStaging>true</skipStaging>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <scm>
         <url>https://github.com/vlisianskii/expression-builder</url>
         <connection>scm:git:https://github.com/vlisianskii/expression-builder.git</connection>
         <developerConnection>scm:git:https://github.com/vlisianskii/expression-builder.git</developerConnection>
-        <tag>HEAD</tag>
+        <tag>1.1</tag>
     </scm>
 
     <distributionManagement>
