@@ -109,7 +109,7 @@
                         </executions>
                         <configuration>
                             <serverId>ossrh</serverId>
-                            <nexusUrl>http://localhost:8081/nexus/</nexusUrl>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                             <skipStaging>true</skipStaging>
                         </configuration>
                     </plugin>
