@@ -59,10 +59,9 @@ public class AbstractExpression<X, Y> {
                 case OPERATOR:
                     applyOperator(output, token);
                     break;
-                case FUNCTION: {
+                case FUNCTION:
                     applyFunction(output, token, table, x, y);
                     break;
-                }
                 case VARIABLE:
                     applyVariable(output, token, table, x, y, customVariables);
                     break;
