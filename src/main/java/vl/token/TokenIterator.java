@@ -12,6 +12,7 @@ import vl.token.tokens.ValueToken;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -38,6 +39,9 @@ public class TokenIterator<X, Y> implements Iterator<ExpressionToken> {
 
     @Override
     public ExpressionToken next() {
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         char c = skipWhiteSpaces();
         ExpressionToken token = getNextToken(c);
         lastToken = token;

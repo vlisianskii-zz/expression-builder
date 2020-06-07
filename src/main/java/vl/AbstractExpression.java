@@ -22,6 +22,7 @@ import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
 @Getter
+@SuppressWarnings(value = {"java:S1172", "java:S1149"})
 public class AbstractExpression<X, Y> {
     private final String name;
     private final String expression;
@@ -47,32 +48,25 @@ public class AbstractExpression<X, Y> {
         return compute(null, null, null, Collections.emptyMap());
     }
 
+    @SuppressWarnings("java:S1149")
     Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         checkTokens(tokens, customVariables);
-
         Stack<Double> output = new Stack<>();
         for (ExpressionToken token : tokens) {
             switch (token.getTokenType()) {
-                case NUMBER: {
-                    ValueToken<Double> t = (ValueToken<Double>) token;
-                    output.push(applyNumber(t.getValue()));
+                case NUMBER:
+                    applyNumber(output, token);
                     break;
-                }
-                case OPERATOR: {
-                    ValueToken<Operator> t = (ValueToken<Operator>) token;
-                    output.push(applyOperator(t.getValue(), output));
+                case OPERATOR:
+                    applyOperator(output, token);
                     break;
-                }
                 case FUNCTION: {
-                    ArgumentToken<Function<X, Y>> t = (ArgumentToken<Function<X, Y>>) token;
-                    output.push(applyFunction(t, table, x, y));
+                    applyFunction(output, token, table, x, y);
                     break;
                 }
-                case VARIABLE: {
-                    ValueToken<String> t = (ValueToken<String>) token;
-                    output.push(applyVariable(t, table, x, y, customVariables));
+                case VARIABLE:
+                    applyVariable(output, token, table, x, y, customVariables);
                     break;
-                }
                 default:
                     throw new InvalidTokenException("Unable to parse token: " + token);
             }
@@ -93,28 +87,33 @@ public class AbstractExpression<X, Y> {
                 .build();
     }
 
-    private Double applyVariable(ValueToken<String> token, ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
-        String tokenName = token.getValue();
+    private void applyVariable(Stack<Double> output, ExpressionToken token, ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
+        ValueToken<String> t = (ValueToken<String>) token;
+
+        String tokenName = t.getValue();
         if (constants.containsKey(tokenName)) {
-            return constants.get(tokenName);
+            output.push(constants.get(tokenName));
+            return;
         }
         if (customVariables.containsKey(tokenName)) {
-            return customVariables.get(tokenName);
+            output.push(customVariables.get(tokenName));
+            return;
         }
         if (isNull(table)) {
             throw new NotEnoughDataException("Not enough data to compute expression: " + expression + ". Unable to find token: " + tokenName);
         }
-        return getValueFromTable(table, x, y, tokenName);
+        output.push(getValueFromTable(table, x, y, tokenName));
     }
 
     protected Double getValueFromTable(ValueTable<X, Y> table, X x, Y y, String tokenName) {
         return table.getValue(x, y);
     }
 
-    private Double applyFunction(ArgumentToken<Function<X, Y>> token, ValueTable<X, Y> table, X x, Y y) {
-        Coordinates<X, Y> coordinates = getCoordinates(x, y, token.getArguments());
-        Function<X, Y> function = token.getValue();
-        return function.apply(token, table, coordinates);
+    private void applyFunction(Stack<Double> output, ExpressionToken token, ValueTable<X, Y> table, X x, Y y) {
+        ArgumentToken<Function<X, Y>> t = (ArgumentToken<Function<X, Y>>) token;
+        Coordinates<X, Y> coordinates = getCoordinates(x, y, t.getArguments());
+        Function<X, Y> function = t.getValue();
+        output.push(function.apply(t, table, coordinates));
     }
 
     protected Coordinates<X, Y> getCoordinates(X x, Y y, String arguments) {
@@ -124,24 +123,30 @@ public class AbstractExpression<X, Y> {
                 .build();
     }
 
-    private Double applyNumber(Double v) {
-        return v;
+    private void applyNumber(Stack<Double> output, ExpressionToken token) {
+        ValueToken<Double> t = (ValueToken<Double>) token;
+        output.push(t.getValue());
     }
 
-    private Double applyOperator(Operator o, Stack<Double> output) {
+    private void applyOperator(Stack<Double> output, ExpressionToken token) {
+        ValueToken<Operator> t = (ValueToken<Operator>) token;
+        Operator o = t.getValue();
         if (output.size() < o.getNumOperands()) {
             throw new InvalidExpressionException(String.format("Invalid number of operands available for operator '%s', expression [%s]", o.getSymbol(), this));
         }
         if (o.getNumOperands() == 2) {
             double rightArg = output.pop();
             double leftArg = output.pop();
-            return o.apply(leftArg, rightArg);
+            output.push(o.apply(leftArg, rightArg));
+            return;
         }
         double arg = output.pop();
-        return o.apply(arg);
+        output.push(o.apply(arg));
     }
 
-    protected void checkTokens(List<ExpressionToken> tokens, Map<String, Double> customVariables) { }
+    protected void checkTokens(List<ExpressionToken> tokens, Map<String, Double> customVariables) {
+        // overridable
+    }
 
     @Override
     public String toString() {
