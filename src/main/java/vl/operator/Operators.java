@@ -11,40 +11,40 @@ import static java.lang.String.valueOf;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Operators {
-    private static final Map<String, Operator> OPERATORS = newHashMap();
+    private static final Map<String, Operator> OPERATORS_MAP = newHashMap();
 
     static {
-        OPERATORS.put("+", new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
+        OPERATORS_MAP.put("+", new Operator("+", 2, true, Operator.PRECEDENCE_ADDITION) {
             @Override
             public double apply(double... args) {
                 return args[0] + args[1];
             }
         });
-        OPERATORS.put("-", new Operator("-", 2, true, Operator.PRECEDENCE_SUBTRACTION) {
+        OPERATORS_MAP.put("-", new Operator("-", 2, true, Operator.PRECEDENCE_SUBTRACTION) {
             @Override
             public double apply(double... args) {
                 return args[0] - args[1];
             }
         });
-        OPERATORS.put("--", new Operator("-", 1, false, Operator.PRECEDENCE_UNARY_MINUS) {
+        OPERATORS_MAP.put("--", new Operator("-", 1, false, Operator.PRECEDENCE_UNARY_MINUS) {
             @Override
             public double apply(double... args) {
                 return -args[0];
             }
         });
-        OPERATORS.put("++", new Operator("+", 1, false, Operator.PRECEDENCE_UNARY_PLUS) {
+        OPERATORS_MAP.put("++", new Operator("+", 1, false, Operator.PRECEDENCE_UNARY_PLUS) {
             @Override
             public double apply(double... args) {
                 return args[0];
             }
         });
-        OPERATORS.put("*", new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
+        OPERATORS_MAP.put("*", new Operator("*", 2, true, Operator.PRECEDENCE_MULTIPLICATION) {
             @Override
             public double apply(double... args) {
                 return args[0] * args[1];
             }
         });
-        OPERATORS.put("/", new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {
+        OPERATORS_MAP.put("/", new Operator("/", 2, true, Operator.PRECEDENCE_DIVISION) {
             @Override
             public double apply(double... args) {
                 if (args[1] == 0.0) {
@@ -56,7 +56,7 @@ public class Operators {
     }
 
     public static boolean isOperator(char c) {
-        return OPERATORS.containsKey(valueOf(c));
+        return OPERATORS_MAP.containsKey(valueOf(c));
     }
 
     public static Operator getOperator(char c, int numArguments) {
@@ -64,6 +64,6 @@ public class Operators {
         if (numArguments == 1) {
             request += request;
         }
-        return OPERATORS.get(request);
+        return OPERATORS_MAP.get(request);
     }
 }
