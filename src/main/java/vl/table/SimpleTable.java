@@ -22,7 +22,7 @@ public class SimpleTable implements ValueTable<Integer, String> {
     }
 
     @Override
-    public void traverseEach(BiConsumer<Integer, String> consumer) {
+    public void traverse(BiConsumer<Integer, String> consumer) {
         for (Map.Entry<Integer, Map<String, Double>> x_key: table.entrySet()) {
             for (Map.Entry<String, Double> y_key: x_key.getValue().entrySet()) {
                 consumer.accept(x_key.getKey(), y_key.getKey());

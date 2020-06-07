@@ -38,7 +38,7 @@ public class TrickyExpressionTest {
         TrickyExpression expression = new TrickyExpression(expressionName, "prior(self)/self", algorithm, functions);
         List<Result<Integer, String>> results = newArrayList();
         // action
-        table.traverseEach((x, y) -> {
+        table.traverse((x, y) -> {
             Result<Integer, String> result = expression.calculate(table, x, y);
             System.out.println(result);
             results.add(result);
