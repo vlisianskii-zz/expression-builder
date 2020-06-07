@@ -18,7 +18,7 @@ A powerful expression evaluator that supports constants, custom variables, funct
 ## Getting Started
 ```xml
 <dependency>
-    <groupId>org.vl</groupId>
+    <groupId>io.github.vlisianskii</groupId>
     <artifactId>expression-builder</artifactId>
     <version>1.0</version>
 </dependency>
