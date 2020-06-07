@@ -15,6 +15,16 @@ Expression builder is a Java library that helps to compute simple and complex ex
 </dependency>
 ```
 
+## Supporting
+
+### Functions
+- Average
+- Next
+- Prior
+
+### Constants
+- Months count
+- PI
 
 ## Examples
 
