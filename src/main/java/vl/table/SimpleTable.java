@@ -30,6 +30,7 @@ public class SimpleTable implements ValueTable<Integer, String> {
         }
     }
 
+    @SuppressWarnings("squid:S4276")
     @Override
     public void traverse(Consumer<Integer> consumer) {
         for (Map.Entry<Integer, Map<String, Double>> x_key: table.entrySet()) {

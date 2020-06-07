@@ -22,7 +22,7 @@ import static java.util.Arrays.stream;
 import static java.util.Objects.isNull;
 
 @Getter
-@SuppressWarnings(value = {"java:S1172", "java:S1149"})
+@SuppressWarnings(value = {"squid:S1172", "squid:S1149"})
 public class AbstractExpression<X, Y> {
     private final String name;
     private final String expression;
@@ -48,7 +48,7 @@ public class AbstractExpression<X, Y> {
         return compute(null, null, null, Collections.emptyMap());
     }
 
-    @SuppressWarnings("java:S1149")
+    @SuppressWarnings("squid:S1149")
     Result<X, Y> compute(ValueTable<X, Y> table, X x, Y y, Map<String, Double> customVariables) {
         checkTokens(tokens, customVariables);
         Stack<Double> output = new Stack<>();

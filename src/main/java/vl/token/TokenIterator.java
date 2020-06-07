@@ -85,6 +85,7 @@ public class TokenIterator<X, Y> implements Iterator<ExpressionToken> {
         return new ValueToken<>(TokenType.VARIABLE, name);
     }
 
+    @SuppressWarnings("squid:S3776")
     private ExpressionToken operator(char c) {
         int offset = pointer;
         int length = 1;
