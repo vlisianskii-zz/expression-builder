@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import vl.algorithms.ShuntingYard;
 import vl.algorithms.TokenAlgorithm;
+import vl.exception.InvalidExpressionException;
 import vl.function.Function;
 import vl.function.functions.PriorFunction;
 import vl.table.Result;
@@ -16,6 +17,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TrickyExpressionTest {
+    private static final String EXPRESSION_NAME = "tricky expression";
     private TokenAlgorithm<Integer, String> algorithm;
     private ValueTable<Integer, String> table;
 
@@ -33,14 +35,12 @@ public class TrickyExpressionTest {
     @Test
     public void return_single_result_for_tricky_expression() {
         // setup
-        String expressionName = "tricky expression";
         Function<Integer, String>[] functions = new Function[]{new PriorFunction()};
-        TrickyExpression expression = new TrickyExpression(expressionName, "prior(self)/self", algorithm, functions);
+        TrickyExpression expression = new TrickyExpression(EXPRESSION_NAME, "self/prior(self)", algorithm, functions);
         List<Result<Integer, String>> results = newArrayList();
         // action
         table.traverse((x, y) -> {
             Result<Integer, String> result = expression.calculate(table, x, y);
-            System.out.println(result);
             results.add(result);
         });
         // verify
@@ -49,26 +49,44 @@ public class TrickyExpressionTest {
                         .x(2020)
                         .y("A")
                         .value(3.0)
-                        .name(expressionName)
+                        .name(EXPRESSION_NAME)
                         .build(),
                 Result.<Integer, String>builder()
                         .x(2020)
                         .value(4.0)
                         .y("B")
-                        .name(expressionName)
+                        .name(EXPRESSION_NAME)
                         .build(),
                 Result.<Integer, String>builder()
                         .x(2021)
                         .y("A")
-                        .name(expressionName)
-                        .value(3.0)
+                        .name(EXPRESSION_NAME)
+                        .value(0.3333333333333333)
                         .build(),
                 Result.<Integer, String>builder()
                         .x(2021)
                         .y("B")
-                        .name(expressionName)
-                        .value(1.8181818181818181)
+                        .name(EXPRESSION_NAME)
+                        .value(0.55)
                         .build()
         );
+    }
+
+    @Test(expected = InvalidExpressionException.class)
+    public void throw_exception_when_there_are_other_variables() {
+        // setup
+        TrickyExpression expression = new TrickyExpression(EXPRESSION_NAME, "self * A", algorithm);
+        // action
+        expression.calculate();
+    }
+
+    @Test(expected = InvalidExpressionException.class)
+    public void throw_exception_when_there_are_wrong_operator_arguments() {
+        // setup
+        TrickyExpression expression = new TrickyExpression(EXPRESSION_NAME, "self *", algorithm);
+        // action
+        table.traverse((x, y) -> {
+            expression.calculate(table, x, y);
+        });
     }
 }

@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![Java CI with Maven](https://github.com/vlisianskii/expression-builder/workflows/Java%20CI%20with%20Maven/badge.svg)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vlisianskii_expression-builder&metric=alert_status)](https://sonarcloud.io/dashboard?id=vlisianskii_expression-builder)
 
 A powerful expression evaluator that supports constants, custom variables, functions and allows to compute a simple and complex expressions.
 
