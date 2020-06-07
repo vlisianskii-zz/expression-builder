@@ -48,6 +48,24 @@ public class SimpleExpressionTest {
     }
 
     @Test
+    public void return_single_result_for_expression_with_custom_variables() {
+        // setup
+        String expressionName = "expression with constants";
+        Map<String, Double> customVariable = newHashMap();
+        customVariable.put("A", 0.19);
+        SimpleExpression expression = new SimpleExpression(expressionName, "(PI - 3.14) * A", algorithm);
+        // action
+        Result<Integer, String> result = expression.calculate(customVariable);
+        System.out.println(result);
+        // verify
+        assertThat(result).isEqualTo(Result.<Integer, String>builder()
+                .name(expressionName)
+                .value(3.0260350000001603E-4)
+                .build()
+        );
+    }
+
+    @Test
     public void return_single_result_for_simple_table() {
         // setup
         String expressionName = "simple expression";

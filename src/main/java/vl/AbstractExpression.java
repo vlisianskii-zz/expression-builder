@@ -5,6 +5,7 @@ import vl.algorithms.TokenAlgorithm;
 import vl.constant.Constants;
 import vl.exception.InvalidExpressionException;
 import vl.exception.InvalidTokenException;
+import vl.exception.NotEnoughDataException;
 import vl.function.Coordinates;
 import vl.function.Function;
 import vl.operator.Operator;
@@ -18,6 +19,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
+import static java.util.Objects.isNull;
 
 @Getter
 public class AbstractExpression<X, Y> {
@@ -35,6 +37,10 @@ public class AbstractExpression<X, Y> {
         this.tokens = algorithm.tokenize(expression, functions);
         this.constants = stream(Constants.values())
                 .collect(Collectors.toMap(Constants::name, Constants::getValue));
+    }
+
+    public Result<X, Y> calculate(Map<String, Double> customVariables) {
+        return compute(null, null, null, customVariables);
     }
 
     public Result<X, Y> calculate() {
@@ -94,6 +100,9 @@ public class AbstractExpression<X, Y> {
         }
         if (customVariables.containsKey(tokenName)) {
             return customVariables.get(tokenName);
+        }
+        if (isNull(table)) {
+            throw new NotEnoughDataException("Not enough data to compute expression: " + expression + ". Unable to find token: " + tokenName);
         }
         return getValueFromTable(table, x, y, tokenName);
     }

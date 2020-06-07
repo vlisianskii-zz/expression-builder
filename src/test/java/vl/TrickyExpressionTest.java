@@ -31,7 +31,7 @@ public class TrickyExpressionTest {
     }
 
     @Test
-    public void return_single_result_for_simple_table() {
+    public void return_single_result_for_tricky_expression() {
         // setup
         String expressionName = "tricky expression";
         Function<Integer, String>[] functions = new Function[]{new PriorFunction()};
