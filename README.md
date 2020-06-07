@@ -12,8 +12,8 @@ A powerful expression evaluator that supports constants, custom variables, funct
 - Prior
 
 ## Constants
-- Months count
-- PI
+- Months count = 12
+- PI = 3.14159265
 
 ## Getting Started
 ```xml
