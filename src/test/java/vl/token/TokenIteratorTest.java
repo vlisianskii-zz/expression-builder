@@ -3,6 +3,7 @@ package vl.token;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import vl.exception.InvalidTokenException;
+import vl.function.AvgFunction;
 import vl.function.Function;
 import vl.function.NextFunction;
 import vl.operator.Operators;
@@ -16,8 +17,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TokenIteratorTest {
-    private static final Function<Integer, String> NEXT_FUNCTION = new NextFunction();
-
     @Test
     public void return_tokens_when_simple_sum_expression() {
         assertTokenIterator("7 + 3", new ExpressionToken[]{
@@ -96,18 +95,28 @@ public class TokenIteratorTest {
 
     @Test
     public void return_tokens_with_functions() {
+        Function<Integer, String> function = new NextFunction();
         assertTokenIterator("(next(B)/next(A))", new ExpressionToken[]{
                         getOpenParentheses(),
-                        getFunction("B"),
+                        getFunction(function, "B"),
                         getOperator('/', 2),
-                        getFunction("A"),
+                        getFunction(function,"A"),
                         getCloseParentheses()
                 },
-                new Function[]{NEXT_FUNCTION});
+                new Function[]{function});
     }
 
-    private ExpressionToken getFunction(String argument) {
-        return new ArgumentToken<>(TokenType.FUNCTION, NEXT_FUNCTION, argument);
+    @Test
+    public void return_tokens_with_avg_functions() {
+        Function<Integer, String> function = new AvgFunction();
+        assertTokenIterator("avg(B,2)", new ExpressionToken[]{
+                        getFunction(function, "B,2")
+                },
+                new Function[]{function});
+    }
+
+    private ExpressionToken getFunction(Function<Integer, String> function, String argument) {
+        return new ArgumentToken<>(TokenType.FUNCTION, function, argument);
     }
 
     private ExpressionToken getOpenParentheses() {
