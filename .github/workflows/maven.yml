@@ -21,22 +21,22 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Nexus Repo Publish
-      uses: samuelmeuli/action-maven-publish@v1
-      with:
+#      uses: samuelmeuli/action-maven-publish@v1
+#      with:
 #        gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
 #        gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-        nexus_username: ${{ secrets.NEXUS_USERNAME }}
-        nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-#      uses: qcastel/github-actions-maven-release@v1.0.3
-#      with:
-#        release-branch-name: "master"
-#        gpg-enabled: "true"
+#        nexus_username: ${{ secrets.NEXUS_USERNAME }}
+#        nexus_password: ${{ secrets.NEXUS_PASSWORD }}
+      uses: qcastel/github-actions-maven-release@v1.0.3
+      with:
+        release-branch-name: "master"
+        gpg-enabled: "false"
 #        gpg-key-id: ${{ secrets.GPG_KEY_ID }}
 #        gpg-key: ${{ secrets.GPG_KEY }}
-#        maven-repo-server-id: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
-#        maven-repo-server-username: ${{ secrets.MVN_REPO_PRIVATE_REPO_USER }}
-#        maven-repo-server-password: ${{ secrets.MVN_REPO_PRIVATE_REPO_PASSWORD }}
-#        maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
-#        git-release-bot-name: "vl-bot"
-#        git-release-bot-email: "vlisianskii@gmail.com"
-#        access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        maven-repo-server-id: ${{ secrets.NEXUS_USERNAME }}
+        maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
+        maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
+        maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
+        git-release-bot-name: "vl-bot"
+        git-release-bot-email: "vlisianskii@gmail.com"
+        access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
