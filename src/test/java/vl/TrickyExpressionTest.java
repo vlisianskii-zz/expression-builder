@@ -5,7 +5,7 @@ import org.junit.Test;
 import vl.algorithms.ShuntingYard;
 import vl.algorithms.TokenAlgorithm;
 import vl.function.Function;
-import vl.function.PriorFunction;
+import vl.function.functions.PriorFunction;
 import vl.table.Result;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;

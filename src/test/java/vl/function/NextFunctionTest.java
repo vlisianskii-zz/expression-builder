@@ -3,6 +3,7 @@ package vl.function;
 import org.junit.Before;
 import org.junit.Test;
 import vl.exception.NotEnoughDataException;
+import vl.function.functions.NextFunction;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;
 import vl.token.TokenType;

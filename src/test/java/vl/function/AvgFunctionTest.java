@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import vl.exception.InvalidTokenException;
 import vl.exception.NotEnoughDataException;
+import vl.function.functions.AvgFunction;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;
 import vl.token.TokenType;

@@ -4,7 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import vl.algorithms.*;
 import vl.function.Function;
-import vl.function.NextFunction;
+import vl.function.functions.NextFunction;
 import vl.table.Result;
 import vl.table.SimpleTable;
 import vl.table.ValueTable;

@@ -1,5 +1,7 @@
-package vl.function;
+package vl.function.functions;
 
+import vl.function.Coordinates;
+import vl.function.Function;
 import vl.table.ValueTable;
 import vl.token.tokens.ArgumentToken;
 
