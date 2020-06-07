@@ -14,7 +14,6 @@ import java.util.*;
 public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
 
     @Override
-    @SuppressWarnings(value = {"java:S3776", "java:S1149", "java:S135"})
     public List<ExpressionToken> tokenize(String expression, Function<X, Y>[] functions) {
         Stack<ExpressionToken> stack = new Stack<>();
         List<ExpressionToken> queue = new ArrayList<>();
