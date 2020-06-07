@@ -127,7 +127,7 @@ Function<Integer, String>[] functions = new Function[]{new PriorFunction()};
 // compute engine replaces word "self" by current cell
 TrickyExpression expression = new TrickyExpression(<name>, "prior(self)/self", algorithm, functions);
 // traverse by X and Y
-table.traverseEach((x, y) -> {
+table.traverse((x, y) -> {
     Result<Integer, String> result = expression.calculate(table, x, y);
 });
 
