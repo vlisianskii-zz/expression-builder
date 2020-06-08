@@ -4,7 +4,7 @@
 
     <groupId>io.github.vlisianskii</groupId>
     <artifactId>expression-builder</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.5</version>
 
     <url>https://github.com/vlisianskii/expression-builder</url>
     <name>Expression builder</name>
