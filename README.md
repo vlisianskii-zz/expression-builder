@@ -15,6 +15,17 @@ A powerful expression builder that helps to compute simple and complex expressio
 - Months count = 12
 - Pi = 3.14159265
 
+## Shunting-yard algorithm
+
+The shunting yard algorithm is a simple technique for parsing infix expressions containing binary operators of varying precedence. 
+In general, the algorithm assigns to each operator its correct operands, taking into account the order of precedence. [Wiki](https://en.wikipedia.org/wiki/Shunting-yard_algorithm) 
+
+```text
+2 * 3 / ( 2 – 1 ) + 5 * ( 4 – 1 )
+```
+
+![Image of Yaktocat](https://i.stack.imgur.com/TrHR0.png)
+
 ## Getting Started
 ```xml
 <dependency>
