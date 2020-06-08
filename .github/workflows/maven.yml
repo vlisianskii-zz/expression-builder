@@ -20,13 +20,38 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-  sonar:
-    name: SonarCloud
+#  sonar:
+#    name: SonarCloud
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Scan
+#        run: mvn -B verify sonar:sonar -Dsonar.projectKey=vlisianskii_expression-builder -Dsonar.organization=vlisianskii -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.exclusions=**/ShuntingYard**
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  release:
+    name: Release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Scan
-        run: mvn -B verify sonar:sonar -Dsonar.projectKey=vlisianskii_expression-builder -Dsonar.organization=vlisianskii -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.exclusions=**/ShuntingYard**
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Maven Central Release
+        uses: qcastel/github-actions-maven-release@master
+        with:
+          release-branch-name: "master"
+
+          gpg-enabled: "true"
+          gpg-key-id: ${{ secrets.GPG_KEY_ID }}
+          gpg-key: ${{ secrets.GPG_KEY }}
+
+          maven-repo-server-id: ${{ secrets.NEXUS_USERNAME }}
+          maven-repo-server-username: ${{ secrets.NEXUS_USERNAME }}
+          maven-repo-server-password: ${{ secrets.NEXUS_PASSWORD }}
+
+          maven-args: "-Dmaven.javadoc.skip=true -DskipTests -DskipITs"
+
+          git-release-bot-name: "release-bot"
+          git-release-bot-email: "vlisianskii@gmail.com"
+
+          access-token: ${{ secrets.GITHUB_TOKEN }}
