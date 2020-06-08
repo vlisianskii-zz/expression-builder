@@ -20,28 +20,13 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-#  sonar:
-#    name: SonarCloud
-#    runs-on: ubuntu-latest
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: Scan
-#        run: mvn -B verify sonar:sonar -Dsonar.projectKey=vlisianskii_expression-builder -Dsonar.organization=vlisianskii -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.exclusions=**/ShuntingYard**
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  release:
-    name: Release
+  sonar:
+    name: SonarCloud
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Release Maven package
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-          nexus_username: ${{ secrets.NEXUS_USERNAME }}
-          nexus_password: ${{ secrets.NEXUS_PASSWORD }}
-          maven_args: "-Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }} -Dmaven.javadoc.skip=true -DskipTests -DskipITs"
-          server_id: "ossrh"
+      - name: Scan
+        run: mvn -B verify sonar:sonar -Dsonar.projectKey=vlisianskii_expression-builder -Dsonar.organization=vlisianskii -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${{ secrets.SONAR_TOKEN }} -Dsonar.exclusions=**/ShuntingYard**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

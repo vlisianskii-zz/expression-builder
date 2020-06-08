@@ -1,0 +1,2 @@
+mvn release:prepare
+mvn release:perform -Darguments="-Dmaven.javadoc.skip=true"

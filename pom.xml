@@ -4,7 +4,7 @@
 
     <groupId>io.github.vlisianskii</groupId>
     <artifactId>expression-builder</artifactId>
-    <version>1.7_SNAPSHOT</version>
+    <version>1.7-SNAPSHOT</version>
 
     <url>https://github.com/vlisianskii/expression-builder</url>
     <name>Expression builder</name>
@@ -24,6 +24,10 @@
         <java.version>1.8</java.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <jacoco-maven-plugin.version>0.8.5</jacoco-maven-plugin.version>
+        <nexus-staging-maven-plugin.version>1.6.8</nexus-staging-maven-plugin.version>
+        <maven-source-plugin.version>2.4</maven-source-plugin.version>
+        <maven-javadoc-plugin.version>2.10.4</maven-javadoc-plugin.version>
+        <maven-gpg-plugin.version>1.6</maven-gpg-plugin.version>
 
         <lombok.version>1.18.12</lombok.version>
         <guava.version>28.0-jre</guava.version>
@@ -65,17 +69,15 @@
                 </executions>
             </plugin>
 
-            <!-- Nexus Staging Plugin -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.8</version>
+                <version>${nexus-staging-maven-plugin.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <serverId>ossrh</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>false</autoReleaseAfterClose>
-                    <!-- Skip deployment to Nexus for test project -->
                     <skipRemoteStaging>true</skipRemoteStaging>
                 </configuration>
             </plugin>
@@ -139,16 +141,14 @@
     </developers>
 
     <profiles>
-        <!-- Deployment profile (required so these plugins are only used when deploying) -->
         <profile>
             <id>deploy</id>
             <build>
                 <plugins>
-                    <!-- Source plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-source-plugin</artifactId>
-                        <version>2.4</version>
+                        <version>${maven-source-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-sources</id>
@@ -159,11 +159,10 @@
                         </executions>
                     </plugin>
 
-                    <!-- Javadoc plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-                        <version>2.10.4</version>
+                        <version>${maven-javadoc-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>attach-javadocs</id>
@@ -178,11 +177,10 @@
                         </configuration>
                     </plugin>
 
-                    <!-- GPG plugin -->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
+                        <version>${maven-gpg-plugin.version}</version>
                         <executions>
                             <execution>
                                 <id>sign-artifacts</id>
@@ -191,7 +189,6 @@
                                     <goal>sign</goal>
                                 </goals>
                                 <configuration>
-                                    <!-- Prevent `gpg` from using pinentry programs -->
                                     <gpgArguments>
                                         <arg>--pinentry-mode</arg>
                                         <arg>loopback</arg>
