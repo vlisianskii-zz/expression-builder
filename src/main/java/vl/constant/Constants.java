@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum Constants {
     MONTHS_COUNT(12.0),
-    PI(3.14159265);
+    Pi(3.14159265);
 
     private final double value;
 }

@@ -1,10 +1,10 @@
-<h1 align="center">Expression builder</h1>
+<h1 align="center">VL Expression builder</h1>
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 ![Java CI with Maven](https://github.com/vlisianskii/expression-builder/workflows/Java%20CI%20with%20Maven/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=vlisianskii_expression-builder&metric=alert_status)](https://sonarcloud.io/dashboard?id=vlisianskii_expression-builder)
 
-A powerful expression evaluator that supports constants, custom variables, functions and allows to compute a simple and complex expressions.
+A powerful expression builder that helps to compute simple and complex expressions. Supports constants, custom variables, functions, and allows to extend the default behavior.
 
 ## Functions
 - Average
@@ -13,14 +13,14 @@ A powerful expression evaluator that supports constants, custom variables, funct
 
 ## Constants
 - Months count = 12
-- PI = 3.14159265
+- Pi = 3.14159265
 
 ## Getting Started
 ```xml
 <dependency>
     <groupId>io.github.vlisianskii</groupId>
     <artifactId>expression-builder</artifactId>
-    <version>1.0</version>
+    <version>${latest.version></version>
 </dependency>
 ```
 
@@ -112,7 +112,7 @@ Result(x=2020, value=0.91, name=<name>)
 #### Constants
 
 ```java
-SimpleExpression expression = new SimpleExpression(<name>, "MONTHS_COUNT/PI", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "MONTHS_COUNT/Pi", algorithm);
 Result<Integer, String> result = expression.calculate();
 
 // Output  
