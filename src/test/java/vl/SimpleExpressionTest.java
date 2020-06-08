@@ -53,7 +53,7 @@ public class SimpleExpressionTest {
         String expressionName = "expression with constants";
         Map<String, Double> customVariable = newHashMap();
         customVariable.put("A", 0.19);
-        SimpleExpression expression = new SimpleExpression(expressionName, "(PI - 3.14) * A", algorithm);
+        SimpleExpression expression = new SimpleExpression(expressionName, "(Pi - 3.14) * A", algorithm);
         // action
         Result<Integer, String> result = expression.calculate(customVariable);
         System.out.println(result);
@@ -157,7 +157,7 @@ public class SimpleExpressionTest {
     public void return_single_result_for_constant_variables() {
         // setup
         String expressionName = "expression with constants";
-        SimpleExpression expression = new SimpleExpression(expressionName, "MONTHS_COUNT/PI", algorithm);
+        SimpleExpression expression = new SimpleExpression(expressionName, "MONTHS_COUNT/Pi", algorithm);
         // action
         Result<Integer, String> result = expression.calculate();
         System.out.println(result);
