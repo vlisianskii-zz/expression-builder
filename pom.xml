@@ -173,10 +173,7 @@
                             </execution>
                         </executions>
                         <configuration>
-                            <!--
-                                Workaround for Javadoc generation issue with Java 11+
-                                TODO: Remove config once https://bugs.openjdk.java.net/browse/JDK-8212233 is fixed
-                            -->
+                            <failOnError>false</failOnError>
                             <source>8</source>
                         </configuration>
                     </plugin>
