@@ -42,7 +42,7 @@ jobs:
           release-branch-name: "master"
 
           gpg-enabled: "true"
-          gpg-key-id: ${{ secrets.GPG_PASSPHRASE }}
+          gpg-key-id: ${{ secrets.GPG_KEY_ID }}
           gpg-key: ${{ secrets.GPG_KEY }}
 
           maven-repo-server-id: ${{ secrets.NEXUS_USERNAME }}
