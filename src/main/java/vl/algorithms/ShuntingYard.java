@@ -45,16 +45,15 @@ public class ShuntingYard<X, Y> implements TokenAlgorithm<X, Y> {
                     stack.push(token);
                     break;
                 case PARENTHESES_CLOSE:
-                    try {
-                        while (!stack.peek().getTokenType().equals(TokenType.PARENTHESES_OPEN)) {
-                            queue.add(stack.pop());
-                        }
-                        stack.pop();
-                        if (!stack.isEmpty() && stack.peek().getTokenType().equals(TokenType.FUNCTION)) {
-                            queue.add(stack.pop());
-                        }
-                    } catch (EmptyStackException e) {
+                    if (stack.isEmpty()) {
                         throw new MismatchParenthesesException(expression);
+                    }
+                    while (!stack.peek().getTokenType().equals(TokenType.PARENTHESES_OPEN)) {
+                        queue.add(stack.pop());
+                    }
+                    stack.pop();
+                    if (!stack.isEmpty() && stack.peek().getTokenType().equals(TokenType.FUNCTION)) {
+                        queue.add(stack.pop());
                     }
                     break;
                 default:
