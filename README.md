@@ -21,7 +21,7 @@ A powerful expression builder that helps to compute simple and complex expressio
 In general, the algorithm assigns to each operator its correct operands, taking into account the order of precedence.  
 
 ```text
-2 * 3 / ( 2 – 1 ) + 5 * ( 4 – 1 )
+2 * 3 / ( 2 - 1 ) + 5 * ( 4 - 1 )
 ```
 
 ![Image of Yaktocat](https://i.stack.imgur.com/TrHR0.png)
@@ -47,12 +47,12 @@ More examples:
 // create Shunting Yard algorithm to build expression
 TokenAlgorithm<Integer, String> algorithm = new ShuntingYard<>();
 
-SimpleExpression expression = new SimpleExpression(<name>, "1+(-2/3)*4", algorithm);
+SimpleExpression expression = new SimpleExpression(<name>, "2 * 3 / ( 2 - 1 ) + 5 * ( 4 - 1 )", algorithm);
 // compute basic expression
 Result<Integer, String> result = expression.calculate();
 
 // Output
-Result(value=-1.6666666666666665, name=<name>)                                        
+Result(value=21.0, name=<name>)                                        
 ```
 
 #### Simple table

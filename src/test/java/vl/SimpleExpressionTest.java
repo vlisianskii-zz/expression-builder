@@ -31,18 +31,17 @@ public class SimpleExpressionTest {
         table.addValue(2021, "B", 2.0);
     }
 
-
     @Test
     public void return_single_result_for_numbers() {
         // setup
         String expressionName = "expression with numbers";
-        SimpleExpression expression = new SimpleExpression(expressionName, "1+(-2/3)*4", algorithm);
+        SimpleExpression expression = new SimpleExpression(expressionName, "2 * 3 / ( 2 - 1 ) + 5 * ( 4 - 1 )", algorithm);
         // action
         Result<Integer, String> result = expression.calculate();
         // verify
         assertThat(result).isEqualTo(Result.<Integer, String>builder()
                 .name(expressionName)
-                .value(-1.6666666666666665)
+                .value(21.0)
                 .build()
         );
     }
